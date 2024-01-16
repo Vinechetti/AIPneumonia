@@ -72,7 +72,11 @@ def detect(image_path):
             T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
         ]
     )
-    img = Image.open(image_path).convert("RGB")
+    try:
+        img = Image.open(image_path).convert("RGB")
+    except FileNotFoundError:
+        print(f"Error: could not find file {image_path}. Please make sure there are no typos and try again.")
+        exit()
     img_tensor = data_T(img)
     img_new = img_tensor.view(1, 3, 224, 224)
     with torch.no_grad():
@@ -80,10 +84,11 @@ def detect(image_path):
     ps = torch.exp(logps)
     probab = list(ps.cpu()[0])
     pred_label = probab.index(max(probab))
+    print(f"Accuracy = {round(acc*100, 2)}%")
     if pred_label:
-        print(f"Pneunomia detected. Accuracy = {round(acc*100, 2)}%")
+        print(f"Pneunomia detected.")
     else:
-        print(f"Pneunomia not detected. Accuracy = {round(acc*100, 2)}%")
+        print(f"Pneunomia not detected.")
 
 
 if __name__ == "__main__":

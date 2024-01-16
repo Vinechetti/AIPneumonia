@@ -90,7 +90,7 @@ def recalculate_accuracy():
     except FileNotFoundError:
         messagebox.showerror(
             "Model file not found!",
-            "Model file was not found. Please make sure it's in the same directory as the application. Make sure its name is the same one as specified in config file.",
+            "Model file was not found. Please specify a correct path in the config file.",
         )
         exit()
     cwd = os.getcwd()
